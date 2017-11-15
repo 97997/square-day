@@ -25,8 +25,8 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
         // Session message to display on success.php
         $_SESSION['message'] = "<p>Please check your email <span>$email</span>"
         . " for a confirmation link to complete your password reset!</p>";
-
-        // Send registration confirmation link (reset.php)
+        
+        /*
         $to      = $email;
         $subject = 'Password Reset Link ( clevertechie.com )';
         $message_body = '
@@ -39,7 +39,20 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
         http://localhost/login-system/reset.php?email='.$email.'&hash='.$hash;  
 
         mail($to, $subject, $message_body);
+        */
+        
+        // Send registration confirmation link (reset.php)
+        require_once 'mail\mailer.php';
+        $mensaje = '
+                Hello '.$first_name.',
 
+        You have requested password reset!
+
+        Please click this link to reset your password:
+        
+        http://localhost/square-day/reset.php?email='.$email.'&hash='.$hash; 
+        
+        enviarCorreo($email,$mensaje);
         header("location: success.php");
   }
 }

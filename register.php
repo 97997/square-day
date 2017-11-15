@@ -41,7 +41,7 @@ else { // Email doesn't already exist in a database, proceed...
                  "Confirmation link has been sent to $email, please verify
                  your account by clicking on the link in the message!";
 
-        // Send registration confirmation link (verify.php)\
+        // Send registration confirmation link (verify.php)
         /*
         $to      = $email;
         $subject = 'Account Verification ( clevertechie.com )';
@@ -55,9 +55,9 @@ else { // Email doesn't already exist in a database, proceed...
         http://localhost/login-system/verify.php?email='.$email.'&hash='.$hash;  
 
         mail( $to, $subject, $message_body );
-         * */
+         * 
+         */
         require_once 'mail\mailer.php';
-        
         $mensaje = '
         Hello '.$first_name.',
 
@@ -65,10 +65,8 @@ else { // Email doesn't already exist in a database, proceed...
 
         Please click this link to activate your account:
 
-        http://localhost/login-system/verify.php?email='.$email.'&hash='.$hash;
-                
+        http://localhost/square-day/verify.php?email='.$email.'&hash='.$hash;  
         enviarCorreo($email,$mensaje);
-
         header("location: profile.php"); 
 
     }
