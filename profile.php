@@ -1,4 +1,9 @@
 <?php
+///TODO: Reparar la inserción de fechas al añadir adicciones
+///TODO: Añadir tiempo exacto en el datetime
+
+
+///TODO: Modificar div para mostrar cuenta en 
 /* Displays user information and some useful messages */
 session_start();
 require('db.php');
@@ -14,9 +19,11 @@ if(isset($_POST['addName']) || isset($_POST['addDate']) || isset($_POST['addTime
 		$addName = $mysqli->escape_string($_POST['addName']);
 		$addDate = $mysqli->escape_string($_POST['addDate']);
 		$addTime = $mysqli->escape_string($_POST['addTime']);
+                echo($addDate." ".$addTime);
+                $addDateTime = $addDate." ".$addTime;
 		$id = $mysqli->escape_string($_SESSION['id']);
 		//print_r($_SESSION);
-		$consulta = "INSERT INTO `addictions`(`id`,`name`,`datetime`) VALUES ('$id','$addName','$addTime')";
+		$consulta = "INSERT INTO `addictions`(`id`,`name`,`datetime`) VALUES ('$id','$addName','$addDateTime')";
 		$result = $mysqli->query($consulta);
 		$_SESSION['info'] = "$addName insertado correctamente";
 		
