@@ -115,30 +115,33 @@ else {
 			$id = $mysqli->escape_string($_SESSION['id']);
 			$consulta = "SELECT * FROM `addictions` WHERE `id` = '$id'";
 			$result = $mysqli->query($consulta) or die($mysqli->error());
-			
+			//console.log("PRUEBA PRUEBA PRUEBA");
 			  //Row será cada fila
-			  while($row = $result->fetch_array())
-			{
-				$rows[] = $row; 
-				//Guardamos cada fila en un arreglo de filas
-			}
-			 //TODO: modificar 
-			 foreach($rows as $row)
-			 {
+                        if($result->num_rows > 0)
+                        {
+                            while($row = $result->fetch_array())
+                          {
+                                  $rows[] = $row; 
+                                  //Guardamos cada fila en un arreglo de filas
+                          }
+                           //TODO: modificar 
+                           foreach($rows as $row)
+                           {
 
-				 print("<div class='addiction'>");
-				 print($row[1]);
-				 print("<br>");
-				 print($row[2]);
-				 print("<br>");
-				 print("</div>");
-					  print("<br>");
-				  
-//				 for($n = 0;$n<3;$n++) //Todas las tablas tienen del 0 al 2 -> ID, Add Name y Datetime
-//			  {
-//
-//			  }
-			 }
+                                   print("<div class='addiction'>");
+                                   print($row[1]);
+                                   print("<br>");
+                                   print($row[2]);
+                                   print("<br>");
+                                   print("</div>");
+                                            print("<br>");
+
+  //				 for($n = 0;$n<3;$n++) //Todas las tablas tienen del 0 al 2 -> ID, Add Name y Datetime
+  //			  {
+  //
+  //			  }
+                           }
+                        }
 			 
 			  //print_r($rows[1]);
 			  

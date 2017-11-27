@@ -7,7 +7,6 @@
 $_SESSION['email'] = $_POST['email'];
 $_SESSION['first_name'] = $_POST['firstname'];
 $_SESSION['last_name'] = $_POST['lastname'];
-
 // Escape all $_POST variables to protect against SQL injections
 $first_name = $mysqli->escape_string($_POST['firstname']);
 $last_name = $mysqli->escape_string($_POST['lastname']);
@@ -41,7 +40,12 @@ else { // Email doesn't already exist in a database, proceed...
                 
                  "Confirmation link has been sent to $email, please verify
                  your account by clicking on the link in the message!";
-
+        $getIdQuery = "SELECT `id` FROM `users` WHERE `email`='$email'";
+        $result = $mysqli->query($getIdQuery);
+        //print();
+        $user = mysqli_fetch_assoc($result);
+        console.log($user);
+        $_SESSION['id'] = $user['id'];
         // Send registration confirmation link (verify.php)
         /*
         $to      = $email;
