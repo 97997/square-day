@@ -1,6 +1,28 @@
 <?php
 /* Displays user information and some useful messages */
 session_start();
+require('db.php');
+//print_r($user);
+if(isset($_POST['addName']) || isset($_POST['addDate']) || isset($_POST['addTime']))
+{
+	if($_POST['addName'] == "" || $_POST['addDate'] == "" || $_POST['addTime'] == "")
+	{
+	$_SESSION['info'] = "You can't leave this empty";
+	}	
+	else
+	{
+		$addName = $mysqli->escape_string($_POST['addName']);
+		$addDate = $mysqli->escape_string($_POST['addDate']);
+		$addTime = $mysqli->escape_string($_POST['addTime']);
+		$id = $mysqli->escape_string($_SESSION['id']);
+		//print_r($_SESSION);
+		$consulta = "INSERT INTO `addictions`(`id`,`name`,`datetime`) VALUES ('$id','$addName','$addTime')";
+		$result = $mysqli->query($consulta);
+		$_SESSION['info'] = "$addName insertado correctamente";
+		
+		//$result = $mysqli->query("INSERT INTO `addictions`(`id`, `name`, `datetime`) VALUES (".$_SESSION['id'].",'$addName','$addTime')");
+	}
+}
 
 // Check if user is logged in using the session variable
 if ( $_SESSION['logged_in'] != 1 ) {
@@ -26,8 +48,16 @@ else {
 		
 	}
 </script>
+ <style>
+.addiction
+	 {
+		text-align: center;
+		 border-style:groove;
+	 }
+	</style>
   <meta charset="UTF-8">
   <title>Welcome <?= $first_name.' '.$last_name ?></title>
+  <!--
   <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src="js/index.js"></script>
 <script src='http://momentjs.com/downloads/moment.min.js'></script>
@@ -35,6 +65,7 @@ else {
   <script language="javascript">
       
   </script>
+  -->
   <?php include 'css/css.html'; ?>
 </head>
 
@@ -54,6 +85,12 @@ else {
               // Don't annoy the user with more messages upon page refresh
               unset( $_SESSION['message'] );
           }
+			  if(	isset($_SESSION['info'])	)
+			  {
+				  echo(
+					 '<h1 style="color:red;">'. $_SESSION['info'].'</h1>'
+				  );
+			  }
           
           ?>
           </p>
@@ -73,6 +110,41 @@ else {
           
           <h2><?php echo $first_name.' '.$last_name; ?></h2>
           <p><?= $email ?></p>
+          <?php
+	//Modificar para quienes no tienen nada agregado
+			$id = $mysqli->escape_string($_SESSION['id']);
+			$consulta = "SELECT * FROM `addictions` WHERE `id` = '$id'";
+			$result = $mysqli->query($consulta) or die($mysqli->error());
+			
+			  //Row será cada fila
+			  while($row = $result->fetch_array())
+			{
+				$rows[] = $row; 
+				//Guardamos cada fila en un arreglo de filas
+			}
+			 //TODO: modificar 
+			 foreach($rows as $row)
+			 {
+
+				 print("<div class='addiction'>");
+				 print($row[1]);
+				 print("<br>");
+				 print($row[2]);
+				 print("<br>");
+				 print("</div>");
+					  print("<br>");
+				  
+//				 for($n = 0;$n<3;$n++) //Todas las tablas tienen del 0 al 2 -> ID, Add Name y Datetime
+//			  {
+//
+//			  }
+			 }
+			 
+			  //print_r($rows[1]);
+			  
+			  //$data = $result->fetch_assoc();
+			  //print_r($data);  
+		?>
           <button class="button button-block" name="new_addiction" id="btn_add_adict" onClick="showForm()">Add addiction</button><br>
           <div style="display: none;" id="addForm">
   <form>
@@ -81,7 +153,7 @@ else {
       <input type="time" class="add_form" placeholder="Time of relapse" name="addTime">
       <br>
       <!--<button class="button button-block">Save</button>-->
-      <input type="submit" class="button button-block" value="Send" formaction="addAdd.php" formmethod="post">
+      <input type="submit" class="button button-block" value="Send" formaction="profile.php" formmethod="post">
       <br>
 
   </form>

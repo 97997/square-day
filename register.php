@@ -18,6 +18,7 @@ $hash = $mysqli->escape_string( md5( rand(0,1000) ) );
 // Check if user with that email already exists
 $result = $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
 
+
 // We know user email exists if the rows returned are more than 0
 if ( $result->num_rows > 0 ) {
     
