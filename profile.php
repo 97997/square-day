@@ -54,6 +54,43 @@ else {
 		document.getElementById("btn_add_adict").style.display = "none";
 		
 	}
+	
+		var timer;
+
+var compareDate = new Date("2017-11-27 13:54");
+//compareDate.setDate("2017-01-01 02:02"); //just for this demo today + 7 days
+
+timer = setInterval(function() {
+  timeBetweenDates(compareDate);
+}, 1000);
+
+function timeBetweenDates(toDate) {
+  var dateEntered = toDate;
+  var now = new Date();
+  var difference = now.getTime() - dateEntered.getTime();
+
+  if (difference <= 0) {
+
+    // Timer done
+    clearInterval(timer);
+  
+  } else {
+    
+    var seconds = Math.floor(difference / 1000);
+    var minutes = Math.floor(seconds / 60);
+    var hours = Math.floor(minutes / 60);
+    var days = Math.floor(hours / 24);
+
+    hours %= 24;
+    minutes %= 60;
+    seconds %= 60;
+
+    $("#days").text(days);
+    $("#hours").text(hours);
+    $("#minutes").text(minutes);
+    $("#seconds").text(seconds);
+  }
+}
 </script>
  <style>
 .addiction
@@ -61,10 +98,29 @@ else {
 		text-align: center;
 		 border-style:groove;
 	 }
+	 
+	 body {
+  background: #f5f5f5;
+}
+	.timer {
+	  font-family: Arial, sans-serif;
+	  font-size: 20px;
+	  color: #999;
+	  letter-spacing: -1px;
+	}
+	.timer span {
+	  font-size: 60px;
+	  color: #333;
+	  margin: 0 3px 0 15px;
+	}
+	.timer span:first-child {
+	  margin-left: 0;
+	}
+  
 	</style>
   <meta charset="UTF-8">
   <title>Welcome <?= $first_name.' '.$last_name ?></title>
-  <!--
+  
   <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src="js/index.js"></script>
 <script src='http://momentjs.com/downloads/moment.min.js'></script>
@@ -72,7 +128,7 @@ else {
   <script language="javascript">
       
   </script>
-  -->
+  
   <?php include 'css/css.html'; ?>
 </head>
 
@@ -132,13 +188,23 @@ else {
                                   //Guardamos cada fila en un arreglo de filas
                           }
                            //TODO: modificar 
+							$counter = 0;
                            foreach($rows as $row)
                            {
-
+							   		$counter += 1;
                                    print("<div class='addiction'>");
                                    print($row[1]);
                                    print("<br>");
                                    print($row[2]);
+							   //Aqui debe de estar el contador
+							   		print("
+										<div id='timer'>
+									  <span id='days'></span>days
+									  <span id='hours''></span>hours
+									  <span id='minutes'></span>minutes
+									  <span id='seconds'></span>seconds
+									</div>
+									");
                                    print("<br>");
                                    print("</div>");
                                             print("<br>");
@@ -171,8 +237,6 @@ else {
           <a href="logout.php"><button class="button button-block" name="logout"/>Log Out</button></a>
           
     </div>
-    
-
 
 </body>
 </html>
