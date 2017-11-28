@@ -55,42 +55,48 @@ else {
 		
 	}
 	
-		var timer;
+function createTimer(datetime,clockNum)
+	{
+		alert("Timer creado " + datetime + " "+clockNum);
+		console.log("Timer creado " + datetime + " "+clockNum);
+					var timer;
 
-var compareDate = new Date("2017-11-27 13:54");
-//compareDate.setDate("2017-01-01 02:02"); //just for this demo today + 7 days
+			var compareDate = new Date(datetime);
+			//compareDate.setDate("2017-01-01 02:02"); //just for this demo today + 7 days
 
-timer = setInterval(function() {
-  timeBetweenDates(compareDate);
-}, 1000);
+			timer = setInterval(function() {
+			  timeBetweenDates(compareDate);
+			}, 1000);
 
-function timeBetweenDates(toDate) {
-  var dateEntered = toDate;
-  var now = new Date();
-  var difference = now.getTime() - dateEntered.getTime();
+			function timeBetweenDates(toDate) {
+			  var dateEntered = toDate;
+			  var now = new Date();
+			  var difference = now.getTime() - dateEntered.getTime();
 
-  if (difference <= 0) {
+			  if (difference <= 0) {
 
-    // Timer done
-    clearInterval(timer);
-  
-  } else {
-    
-    var seconds = Math.floor(difference / 1000);
-    var minutes = Math.floor(seconds / 60);
-    var hours = Math.floor(minutes / 60);
-    var days = Math.floor(hours / 24);
+				// Timer done
+				clearInterval(timer);
 
-    hours %= 24;
-    minutes %= 60;
-    seconds %= 60;
+			  } else {
 
-    $("#days").text(days);
-    $("#hours").text(hours);
-    $("#minutes").text(minutes);
-    $("#seconds").text(seconds);
-  }
-}
+				var seconds = Math.floor(difference / 1000);
+				var minutes = Math.floor(seconds / 60);
+				var hours = Math.floor(minutes / 60);
+				var days = Math.floor(hours / 24);
+
+				hours %= 24;
+				minutes %= 60;
+				seconds %= 60;
+
+				$("#days".concat(clockNum)).text(days);
+				$("#hours".concat(clockNum)).text(hours);
+				$("#minutes".concat(clockNum)).text(minutes);
+				$("#seconds".concat(clockNum)).text(seconds);
+			  }
+			}
+	}
+
 </script>
  <style>
 .addiction
@@ -198,12 +204,15 @@ function timeBetweenDates(toDate) {
                                    print($row[2]);
 							   //Aqui debe de estar el contador
 							   		print("
-										<div id='timer'>
-									  <span id='days'></span>days
-									  <span id='hours''></span>hours
-									  <span id='minutes'></span>minutes
-									  <span id='seconds'></span>seconds
+										<div id='timer{$counter}'>
+									  <span id='days{$counter}'></span>days
+									  <span id='hours{$counter}'></span>hours
+									  <span id='minutes{$counter}'></span>minutes
+									  <span id='seconds{$counter}'></span>seconds
 									</div>
+									<script>
+									createTimer('{$row[2]}','{$counter}');
+									</script>
 									");
                                    print("<br>");
                                    print("</div>");
