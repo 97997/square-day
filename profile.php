@@ -1,13 +1,8 @@
 <?php
-///TODO: Reparar la inserción de fechas al añadir adicciones
-///TODO: Añadir tiempo exacto en el datetime
-
-
-///TODO: Modificar div para mostrar cuenta en 
-/* Displays user information and some useful messages */
+//Sesion y conexion
 session_start();
 require('db.php');
-//print_r($user);
+//Si el usuario añadió una adicción 
 if(isset($_POST['addName']) || isset($_POST['addDate']) || isset($_POST['addTime']))
 {
 	if($_POST['addName'] == "" || $_POST['addDate'] == "" || $_POST['addTime'] == "")
@@ -22,12 +17,9 @@ if(isset($_POST['addName']) || isset($_POST['addDate']) || isset($_POST['addTime
                 echo($addDate." ".$addTime);
                 $addDateTime = $addDate." ".$addTime;
 		$id = $mysqli->escape_string($_SESSION['id']);
-		//print_r($_SESSION);
 		$consulta = "INSERT INTO `addictions`(`id`,`name`,`datetime`) VALUES ('$id','$addName','$addDateTime')";
 		$result = $mysqli->query($consulta);
 		$_SESSION['info'] = "$addName insertado correctamente";
-		
-		//$result = $mysqli->query("INSERT INTO `addictions`(`id`, `name`, `datetime`) VALUES (".$_SESSION['id'].",'$addName','$addTime')");
 	}
 }
 
@@ -48,21 +40,21 @@ else {
 <html >
 <head>
 <script language="javascript">
+	//Muestra el formulario con el usuario da click en add addiction
 	function showForm()
 	{
 		document.getElementById("addForm").style.display = "block";
 		document.getElementById("btn_add_adict").style.display = "none";
 		
 	}
-	
+
+	//Esta función crea el cronometro, datetime es la fecha desde el ultimo relapse, y clockNum el numero de cronometro (normalmente hay multiples cronometro)
 function createTimer(datetime,clockNum)
 	{
-		alert("Timer creado " + datetime + " "+clockNum);
 		console.log("Timer creado " + datetime + " "+clockNum);
 					var timer;
 
 			var compareDate = new Date(datetime);
-			//compareDate.setDate("2017-01-01 02:02"); //just for this demo today + 7 days
 
 			timer = setInterval(function() {
 			  timeBetweenDates(compareDate);
@@ -126,7 +118,7 @@ function createTimer(datetime,clockNum)
 	</style>
   <meta charset="UTF-8">
   <title>Welcome <?= $first_name.' '.$last_name ?></title>
-  
+  <!-- Se requiere de jquery para ejecutar la funciones de los cronometros -->
   <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src="js/index.js"></script>
 <script src='http://momentjs.com/downloads/moment.min.js'></script>
@@ -154,6 +146,7 @@ function createTimer(datetime,clockNum)
               // Don't annoy the user with more messages upon page refresh
               unset( $_SESSION['message'] );
           }
+			  //Muestra posibles errores al añadir adicciones
 			  if(	isset($_SESSION['info'])	)
 			  {
 				  echo(
@@ -184,7 +177,6 @@ function createTimer(datetime,clockNum)
 			$id = $mysqli->escape_string($_SESSION['id']);
 			$consulta = "SELECT * FROM `addictions` WHERE `id` = '$id'";
 			$result = $mysqli->query($consulta) or die($mysqli->error());
-			//console.log("PRUEBA PRUEBA PRUEBA");
 			  //Row será cada fila
                         if($result->num_rows > 0)
                         {
@@ -198,9 +190,10 @@ function createTimer(datetime,clockNum)
                            foreach($rows as $row)
                            {
 							   		$counter += 1;
-                                   print("<div class='addiction'>");
+                                   print("<div class='addiction'><p>");
                                    print($row[1]);
                                    print("<br>");
+							   		print("Addiction added: ");
                                    print($row[2]);
 							   //Aqui debe de estar el contador
 							   		print("
@@ -214,21 +207,12 @@ function createTimer(datetime,clockNum)
 									createTimer('{$row[2]}','{$counter}');
 									</script>
 									");
-                                   print("<br>");
+                                   print("<br><p>");
                                    print("</div>");
                                             print("<br>");
 
-  //				 for($n = 0;$n<3;$n++) //Todas las tablas tienen del 0 al 2 -> ID, Add Name y Datetime
-  //			  {
-  //
-  //			  }
                            }
                         }
-			 
-			  //print_r($rows[1]);
-			  
-			  //$data = $result->fetch_assoc();
-			  //print_r($data);  
 		?>
           <button class="button button-block" name="new_addiction" id="btn_add_adict" onClick="showForm()">Add addiction</button><br>
           <div style="display: none;" id="addForm">
@@ -237,7 +221,6 @@ function createTimer(datetime,clockNum)
       <input type="date" class="add_form" placeholder="Day of last relapse" name="addDate">
       <input type="time" class="add_form" placeholder="Time of relapse" name="addTime">
       <br>
-      <!--<button class="button button-block">Save</button>-->
       <input type="submit" class="button button-block" value="Send" formaction="profile.php" formmethod="post">
       <br>
 
