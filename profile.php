@@ -3,6 +3,7 @@
 session_start();
 require('db.php');
 //Si el usuario añadió una adicción 
+
 if(isset($_POST['addName']) || isset($_POST['addDate']) || isset($_POST['addTime']))
 {
 	if($_POST['addName'] == "" || $_POST['addDate'] == "" || $_POST['addTime'] == "")
@@ -14,7 +15,7 @@ if(isset($_POST['addName']) || isset($_POST['addDate']) || isset($_POST['addTime
 		$addName = $mysqli->escape_string($_POST['addName']);
 		$addDate = $mysqli->escape_string($_POST['addDate']);
 		$addTime = $mysqli->escape_string($_POST['addTime']);
-                echo($addDate." ".$addTime);
+                //echo($addDate." ".$addTime);
                 $addDateTime = $addDate." ".$addTime;
 		$id = $mysqli->escape_string($_SESSION['id']);
 		$consulta = "INSERT INTO `addictions`(`id`,`name`,`datetime`) VALUES ('$id','$addName','$addDateTime')";
@@ -22,6 +23,31 @@ if(isset($_POST['addName']) || isset($_POST['addDate']) || isset($_POST['addTime
 		$_SESSION['info'] = "$addName insertado correctamente";
 	}
 }
+
+//Update procedure
+
+if(isset($_POST['updAddName']) || isset($_POST['updAddDate']) || isset($_POST['updAddTime']) || isset($_POST['updAddNumber']))
+{
+	if($_POST['updAddName'] == "" || $_POST['updAddDate'] == "" || $_POST['updAddTime'] == "")
+	{
+	$_SESSION['info'] = "You can't leave this empty";
+	}	
+	else
+	{
+		$updAddName = $mysqli->escape_string($_POST['updAddName']);
+		$updAddDate = $mysqli->escape_string($_POST['updAddDate']);
+		$updAddTime = $mysqli->escape_string($_POST['updAddTime']);
+		$updAddNumber = $mysqli->escape_string($_POST['updAddNumber']);
+                //echo($addDate." ".$addTime);
+                $updAddDateTime = $updAddDate." ".$updAddTime;
+		$id = $mysqli->escape_string($_SESSION['id']);
+		$consulta = "UPDATE `addictions` SET `name`='{$updAddName}',`datetime`='{$updAddDateTime}' WHERE `number`={$updAddNumber}";
+		$result = $mysqli->query($consulta);
+		$_SESSION['info'] = "$updAddName actualizado correctamente";
+	}
+}
+
+
 
 // Check if user is logged in using the session variable
 if ( $_SESSION['logged_in'] != 1 ) {
@@ -58,6 +84,12 @@ else {
 		var str = "edit_form" + counter;
 		console.log(str);
 		document.getElementById(str).style.display = "block";
+	}
+	function hideEditForm(counter)
+	{
+				var str = "edit_form" + counter;
+		console.log(str);
+		document.getElementById(str).style.display = "none";
 	}
 
 	//Esta función crea el cronometro, datetime es la fecha desde el ultimo relapse, y clockNum el numero de cronometro (normalmente hay multiples cronometro)
@@ -219,6 +251,7 @@ function createTimer(datetime,clockNum)
                                    print("<br>");
 							   		print("Addiction added: ");
                                    print($row[2]);
+							   		//print($row[3]);
 							   //Aqui debe de estar el contador
 							   		print("
 										<div id='timer{$counter}'>
@@ -234,17 +267,20 @@ function createTimer(datetime,clockNum)
                                    print("<br><p>");
 							   //Edición de vicios
 							   		$class = "edit_form".$counter;
-							   	   print("<button name='edit' id='btn_edit_add{$counter}' class='edit_form{$counter}' onClick='showEditForm($counter)'>
+							   	   print("<button name='edit' class='btn_add_edit' onClick='showEditForm($counter)'>
 								   Edit time</button>");
 							   //print($date);
 							   print("
 							   <div id='edit_form{$counter}' style='display:none;'>
+							   <form>
 		<input type='text' class='edit_form{$counter}' placeholder='Addiction name' name='updAddName' value='{$row[1]}'>
       <input type='date' class='edit_form{$counter}' placeholder='Day of last relapse' name='updAddDate' value=$date>
       <input type='time' class='edit_form{$counter}' placeholder='Time of relapse' name='updAddTime' value=$time>
+	  	        <input type='submit' class='button button-block' value='Cancel' onClick='hideEditForm($counter)'>
+				<input type='hidden' value='{$row[3]}' name='updAddNumber'>
 	        <input type='submit' class='button button-block' value='Update' formaction='profile.php' formmethod='post'>
 							
-								</div>
+								</div></form>
 	  ");
 
                                    print("</div>");
