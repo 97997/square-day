@@ -47,6 +47,18 @@ else {
 		document.getElementById("btn_add_adict").style.display = "none";
 		
 	}
+		function hideForm()
+	{
+		document.getElementById("addForm").style.display = "none";
+		document.getElementById("btn_add_adict").style.display = "block";
+		
+	}
+	function showEditForm(counter)
+	{
+		var str = "edit_form" + counter;
+		console.log(str);
+		document.getElementById(str).style.display = "block";
+	}
 
 	//Esta función crea el cronometro, datetime es la fecha desde el ultimo relapse, y clockNum el numero de cronometro (normalmente hay multiples cronometro)
 function createTimer(datetime,clockNum)
@@ -100,6 +112,9 @@ function createTimer(datetime,clockNum)
 	 body {
   background: #f5f5f5;
 }
+	 .timeLabel{
+		 color: aqua;
+	 }
 	.timer {
 	  font-family: Arial, sans-serif;
 	  font-size: 20px;
@@ -114,6 +129,12 @@ function createTimer(datetime,clockNum)
 	.timer span:first-child {
 	  margin-left: 0;
 	}
+	 .btn_add_edit
+	 {
+		 color: #1AB188;
+		 background-color: white;
+		 
+	 }
   
 	</style>
   <meta charset="UTF-8">
@@ -173,6 +194,9 @@ function createTimer(datetime,clockNum)
           <h2><?php echo $first_name.' '.$last_name; ?></h2>
           <p><?= $email ?></p>
           <?php
+	$date = date('Y-m-d');
+	$time = date('H:i');
+			  //var_dump($date);
 	//Modificar para quienes no tienen nada agregado
 			$id = $mysqli->escape_string($_SESSION['id']);
 			$consulta = "SELECT * FROM `addictions` WHERE `id` = '$id'";
@@ -198,16 +222,31 @@ function createTimer(datetime,clockNum)
 							   //Aqui debe de estar el contador
 							   		print("
 										<div id='timer{$counter}'>
-									  <span id='days{$counter}'></span>days
-									  <span id='hours{$counter}'></span>hours
-									  <span id='minutes{$counter}'></span>minutes
-									  <span id='seconds{$counter}'></span>seconds
+									  <span id='days{$counter}'></span><span style='color:white'> days</span>
+									  <span id='hours{$counter}'></span><span style='color:white'> hours</span>
+									  <span id='minutes{$counter}'></span><span style='color:white'> minutes</span>
+									  <span id='seconds{$counter}'></span><span style='color:white'> seconds</span>
 									</div>
 									<script>
 									createTimer('{$row[2]}','{$counter}');
 									</script>
 									");
                                    print("<br><p>");
+							   //Edición de vicios
+							   		$class = "edit_form".$counter;
+							   	   print("<button name='edit' id='btn_edit_add{$counter}' class='edit_form{$counter}' onClick='showEditForm($counter)'>
+								   Edit time</button>");
+							   //print($date);
+							   print("
+							   <div id='edit_form{$counter}' style='display:none;'>
+		<input type='text' class='edit_form{$counter}' placeholder='Addiction name' name='updAddName' value='{$row[1]}'>
+      <input type='date' class='edit_form{$counter}' placeholder='Day of last relapse' name='updAddDate' value=$date>
+      <input type='time' class='edit_form{$counter}' placeholder='Time of relapse' name='updAddTime' value=$time>
+	        <input type='submit' class='button button-block' value='Update' formaction='profile.php' formmethod='post'>
+							
+								</div>
+	  ");
+
                                    print("</div>");
                                             print("<br>");
 
@@ -222,6 +261,9 @@ function createTimer(datetime,clockNum)
       <input type="time" class="add_form" placeholder="Time of relapse" name="addTime">
       <br>
       <input type="submit" class="button button-block" value="Send" formaction="profile.php" formmethod="post">
+      
+	  <input type="submit" class="button button-block" value="Cancel" onClick="hideForm()"></button>
+
       <br>
 
   </form>
