@@ -47,6 +47,25 @@ if(isset($_POST['updAddName']) || isset($_POST['updAddDate']) || isset($_POST['u
 	}
 }
 
+//Delete procedure
+
+if(isset($_POST['deleteAddNumber']))
+   {
+	   if($_POST['deleteAddNumber'] == "")
+	   {
+		   	$_SESSION['info'] = "SE SUPONE QUE ESTO NUNCA DEBERÍA PASAR. PD: Holi wagakimi >w<";
+
+	   }
+	   else
+	   {
+		$deleteAddNumber = $mysqli->escape_string($_POST['deleteAddNumber']);
+		$consulta = "DELETE FROM `addictions` WHERE `number`={$deleteAddNumber}";
+		$result = $mysqli->query($consulta);
+		$_SESSION['info'] = "Addiction correctly removed";
+
+	   }
+
+}
 
 
 // Check if user is logged in using the session variable
@@ -245,13 +264,16 @@ function createTimer(datetime,clockNum)
 							$counter = 0;
                            foreach($rows as $row)
                            {
+							   //Row 0 -> ID del usuario al que pertenece la adicción
+							   //Row 1-> Nombre de la adicción 
+							   //Row 2 -> Datetime
+							   //Row 3 -> Addiction #
 							   		$counter += 1;
                                    print("<div class='addiction'><p>");
                                    print($row[1]);
                                    print("<br>");
 							   		print("Addiction added: ");
                                    print($row[2]);
-							   		//print($row[3]);
 							   //Aqui debe de estar el contador
 							   		print("
 										<div id='timer{$counter}'>
@@ -269,7 +291,15 @@ function createTimer(datetime,clockNum)
 							   		$class = "edit_form".$counter;
 							   	   print("<button name='edit' class='btn_add_edit' onClick='showEditForm($counter)'>
 								   Edit time</button>");
-							   //print($date);
+							   
+							   	   print("
+								   <form>
+								   <input type='hidden' value='{$row[3]}' name='deleteAddNumber'>
+								   <button name='edit' class='btn_add_edit' formaction='profile.php' formmethod='post'>
+								   Delete addiction</button>
+								   </form>
+								   ");		
+							   
 							   print("
 							   <div id='edit_form{$counter}' style='display:none;'>
 							   <form>
