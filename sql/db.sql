@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.7.4
+-- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-12-2017 a las 21:03:53
--- Versión del servidor: 10.1.19-MariaDB
--- Versión de PHP: 5.6.28
+-- Tiempo de generación: 14-12-2017 a las 01:04:51
+-- Versión del servidor: 10.1.28-MariaDB
+-- Versión de PHP: 7.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -29,16 +31,16 @@ SET time_zone = "+00:00";
 CREATE TABLE `addictions` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `number` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `addictions`
 --
 
-INSERT INTO `addictions` (`id`, `name`, `datetime`) VALUES
-(12, 'Tiempo desde ahorita', '2017-11-28 09:26:00'),
-(12, 'Cigarro', '2017-11-01 10:27:00');
+INSERT INTO `addictions` (`id`, `name`, `datetime`, `number`) VALUES
+(13, 'Alcohol', '2017-12-01 09:01:00', 3);
 
 -- --------------------------------------------------------
 
@@ -60,10 +62,19 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `hash`, `active`) VALUES
+(12, 'Ecab', 'Gutierrez', 'ecktahab@gmail.com', '$2y$10$S2rL3jXzS2.004FjdxLWY.uSPhmJEX82FoJJdmVh7xVsWYmLfKsOq', '37f0e884fbad9667e38940169d0a3c95', 1),
+(13, '1', '1', '1@1.1', '$2y$10$FbVbnzExDHgTC3R3ERRvzObQFmVLjyecIHD86Ig.uGXIANBARjwx.', 'e2c0be24560d78c5e599c2a9c9d0bbd2', 0);
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `addictions`
+--
+ALTER TABLE `addictions`
+  ADD PRIMARY KEY (`number`);
 
 --
 -- Indices de la tabla `users`
@@ -76,10 +87,18 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `addictions`
+--
+ALTER TABLE `addictions`
+  MODIFY `number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
